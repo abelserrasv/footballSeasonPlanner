@@ -10,4 +10,20 @@
 
 @interface SPTeam : NSObject
 
+/**
+ Initializer that creates a new instance of the Team with the name of it.
+ 
+ @param name Name of the Team
+ 
+ @return the SPTeam instance.
+ */
+- (id)initWithName:(NSString *)name;
+
+/**
+ This method returns the name of the team.
+ 
+ @return a string with name of the team.
+ */
+- (NSString *)getTeamName;
+
 @end
