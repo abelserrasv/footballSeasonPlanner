@@ -7,15 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB9340601D8ABAF8004A922D /* SPSeason.m in Sources */ = {isa = PBXBuildFile; fileRef = CB93405F1D8ABAF8004A922D /* SPSeason.m */; };
 		CBEBCFA81D6F491F006161AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEBCFA71D6F491F006161AF /* main.m */; };
 		CBEBCFAB1D6F491F006161AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEBCFAA1D6F491F006161AF /* AppDelegate.m */; };
 		CBEBCFAE1D6F491F006161AF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEBCFAD1D6F491F006161AF /* ViewController.m */; };
 		CBEBCFB11D6F491F006161AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEBCFAF1D6F491F006161AF /* Main.storyboard */; };
 		CBEBCFB31D6F491F006161AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBEBCFB21D6F491F006161AF /* Assets.xcassets */; };
 		CBEBCFB61D6F491F006161AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEBCFB41D6F491F006161AF /* LaunchScreen.storyboard */; };
+		CBEBCFBF1D6F55CB006161AF /* SPTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEBCFBE1D6F55CB006161AF /* SPTeam.m */; };
+		CBEBCFC21D6F55EF006161AF /* SPMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEBCFC11D6F55EF006161AF /* SPMatch.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB93405E1D8ABAF8004A922D /* SPSeason.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSeason.h; sourceTree = "<group>"; };
+		CB93405F1D8ABAF8004A922D /* SPSeason.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSeason.m; sourceTree = "<group>"; };
 		CBEBCFA31D6F491F006161AF /* aufgabeSpielplan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aufgabeSpielplan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBEBCFA71D6F491F006161AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CBEBCFA91D6F491F006161AF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -26,6 +31,10 @@
 		CBEBCFB21D6F491F006161AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBEBCFB51D6F491F006161AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBEBCFB71D6F491F006161AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CBEBCFBD1D6F55CB006161AF /* SPTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPTeam.h; sourceTree = "<group>"; };
+		CBEBCFBE1D6F55CB006161AF /* SPTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPTeam.m; sourceTree = "<group>"; };
+		CBEBCFC01D6F55EF006161AF /* SPMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPMatch.h; sourceTree = "<group>"; };
+		CBEBCFC11D6F55EF006161AF /* SPMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPMatch.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +48,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CB93405D1D8A9702004A922D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CBEBCFBD1D6F55CB006161AF /* SPTeam.h */,
+				CBEBCFBE1D6F55CB006161AF /* SPTeam.m */,
+				CBEBCFC01D6F55EF006161AF /* SPMatch.h */,
+				CBEBCFC11D6F55EF006161AF /* SPMatch.m */,
+				CB93405E1D8ABAF8004A922D /* SPSeason.h */,
+				CB93405F1D8ABAF8004A922D /* SPSeason.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		CBEBCF9A1D6F491E006161AF = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +80,7 @@
 		CBEBCFA51D6F491F006161AF /* aufgabeSpielplan */ = {
 			isa = PBXGroup;
 			children = (
+				CB93405D1D8A9702004A922D /* Model */,
 				CBEBCFA91D6F491F006161AF /* AppDelegate.h */,
 				CBEBCFAA1D6F491F006161AF /* AppDelegate.m */,
 				CBEBCFAC1D6F491F006161AF /* ViewController.h */,
@@ -152,9 +175,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBEBCFC21D6F55EF006161AF /* SPMatch.m in Sources */,
 				CBEBCFAE1D6F491F006161AF /* ViewController.m in Sources */,
+				CBEBCFBF1D6F55CB006161AF /* SPTeam.m in Sources */,
 				CBEBCFAB1D6F491F006161AF /* AppDelegate.m in Sources */,
 				CBEBCFA81D6F491F006161AF /* main.m in Sources */,
+				CB9340601D8ABAF8004A922D /* SPSeason.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +333,7 @@
 				CBEBCFBC1D6F491F006161AF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
