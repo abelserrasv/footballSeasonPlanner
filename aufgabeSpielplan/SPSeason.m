@@ -24,56 +24,74 @@
  value: NSArray of matches which represents all matches that take place this date (key NSDate).
  
  This structure will be used by the Tableview datasource to calculate the sections and rows, as well as to access to the
- information. 
+ information.
  
  Doing this way we can get with the indexpath the indexes of the key and values of the dictionary.
  */
-@property NSMutableDictionary *seasonPlan;
+@property NSDictionary *seasonPlan;
 
 @property NSMutableSet<SPTeam *> *teams;
 @property NSDictionary *jsonSeasonFile;
+@property NSArray<NSDate *> *sortedMatchDays;
+@property NSError *errorDuringCreation;
 
 @end
 
 @implementation SPSeason
 
-- (id)init
+- (id)initWithJsonFileName:(NSString *)jsonFileName
 {
     self = [super init];
     if (self) {
-        [self initialize];
+        _teams = [[NSMutableSet alloc] init];
+        _seasonPlan = [[NSMutableDictionary alloc] init];
+        _sortedMatchDays = [[NSArray alloc] init];
+        _errorDuringCreation = nil;
+        [self initialize:jsonFileName];
     }
     return self;
 }
 
-- (void)initialize
+- (void)initialize:(NSString *)jsonFileName
 {
-    [self createDictionaryFromSeasonJson];
-    [self setLeagueFromJsonFile];
-    [self setSeasonFromJsonFile];
-    [self getListMatches];
+    NSDataAsset *mannschaften = [[NSDataAsset alloc] initWithName:jsonFileName];
+    
+    [self createDictionaryFromSeasonJson:mannschaften];
+    
+    // If no error with the json file occur.
+    if (!self.errorDuringCreation) {
+        [self setLeagueFromJsonFile];
+        [self setSeasonFromJsonFile];
+        self.teams = [self createTeams];
+        self.seasonPlan = [self getListMatches];
+        self.sortedMatchDays = [self sortMatchDatesArray];
+    }
 }
 
-- (void)createDictionaryFromSeasonJson
+- (void)createDictionaryFromSeasonJson:(NSDataAsset *)jsonFile
 {
-    NSDataAsset *mannschaften =
-        [[NSDataAsset alloc] initWithName:@"mannschaften"];
-
-    self.seasonPlan = [[NSMutableDictionary alloc] init];
-
+    if (!jsonFile) {
+        NSDictionary *userInfo = @{
+                                   NSLocalizedDescriptionKey: NSLocalizedString(@"The file operation failed because the file does not exist.", nil)
+                                   };
+        self.errorDuringCreation = [NSError errorWithDomain:NSFilePathErrorKey
+                                             code:-1100
+                                         userInfo:userInfo];
+        return;
+    }
+    
     NSError *error = nil;
-
-    NSString *iso = [[NSString alloc] initWithData:mannschaften.data
+    NSString *iso = [[NSString alloc] initWithData:jsonFile.data
                                           encoding:NSISOLatin1StringEncoding];
     NSData *dutf8 = [iso dataUsingEncoding:NSUTF8StringEncoding];
-
+    
     self.jsonSeasonFile =
-        [NSJSONSerialization JSONObjectWithData:dutf8
-                                        options:NSJSONReadingMutableContainers
-                                          error:&error];
-
+    [NSJSONSerialization JSONObjectWithData:dutf8
+                                    options:NSJSONReadingMutableContainers
+                                      error:&error];
     if (error) {
         NSLog(@"JSONObjectWithData error: %@", error);
+        self.errorDuringCreation = error;
     }
 }
 
@@ -87,94 +105,129 @@
     self.seasonName = [self.jsonSeasonFile objectForKey:@"season"];
 }
 
-- (void)createTeams
+- (NSMutableSet<SPTeam *> *)createTeams
 {
-    self.teams = [[NSMutableSet alloc] init];
-    for (NSMutableDictionary *team in
-         [self.jsonSeasonFile objectForKey:@"teams"]) {
-        SPTeam *newTeam = [[SPTeam alloc] initWithName:[team objectForKey:@"name"]];
-        [self.teams addObject:newTeam];
+    NSMutableSet<SPTeam *> *localSetOfteams = [[NSMutableSet alloc] init];
+    // Check of there is enough days to play
+    if (self.jsonSeasonFile)
+    {
+        for (NSMutableDictionary *team in
+             [self.jsonSeasonFile objectForKey:@"teams"]) {
+            SPTeam *newTeam = [[SPTeam alloc] initWithName:[team objectForKey:@"name"]];
+            [localSetOfteams addObject:newTeam];
+        }
+    }
+    if (localSetOfteams.count < 2){
+        NSDictionary *userInfo = @{
+                                   NSLocalizedDescriptionKey: NSLocalizedString(@"The file operation failed because there is not enough teams to organize the season.", nil)
+                                   };
+        self.errorDuringCreation = [NSError errorWithDomain:@"Teams error."
+                                                       code:-1
+                                                   userInfo:userInfo];
+        return nil;
+    } else {
+        return localSetOfteams;
     }
 }
 
-- (void)getListMatches
+- (NSDictionary *)getListMatches
 {
-    [self createTeams];
-    [self getAllSundays];
-    NSArray<NSDate *> *arrayOfMatchDates = [self getAllSundays];
-
+    // There was an error with the teams array creation.
+    if (self.errorDuringCreation) {
+        return nil;
+    }
+    
+    NSMutableDictionary *seasonLocalDictionary = [[NSMutableDictionary alloc] init];
+    
     NSMutableArray<SPTeam *> *teamList = [[self.teams allObjects] mutableCopy];
     if ([teamList count] % 2 != 0) {
         SPTeam *newTeam = [[SPTeam alloc] initWithName:nil];
         [teamList addObject:newTeam];
     }
-
+    
+    NSArray<NSDate *> *arrayOfMatchDates = [self getAllSundays];
+    
+    NSUInteger numDaysPerRound = ([teamList count] - 1);
+    
     // Check of there is enough days to play
-    NSUInteger numDays = ([teamList count] - 1);
+    // (numDaysPerRound * 2) --> numDaysPerRound: number of matches per round
+    //                           2: 2 rounds per season.
+    if ((numDaysPerRound * 2) > arrayOfMatchDates.count)
+    {
+        NSDictionary *userInfo = @{
+                                   NSLocalizedDescriptionKey: NSLocalizedString(@"The file operation failed because there is not enough days to place the matches.", nil)
+                                   };
+        self.errorDuringCreation = [NSError errorWithDomain:@"Matches error."
+                                                       code:-2
+                                                   userInfo:userInfo];
+        return nil;
+    }
+    
     NSUInteger halfSize = [teamList count] / 2;
-
+    
     NSMutableArray<SPTeam *> *teams = [[NSMutableArray<SPTeam *> alloc] init];
-
+    
     [teams addObjectsFromArray:teamList];
     [teams removeObjectAtIndex:0];
-
+    
     NSUInteger teamsSize = [teams count];
-
-    for (int day = 0; day < numDays; day++) {
+    
+    for (int day = 0; day < numDaysPerRound; day++) {
         NSLog(@"-------- First Round ----------------");
         NSLog(@"Day %@", [arrayOfMatchDates objectAtIndex:(day)]);
-
+        
         int teamIdx = day % teamsSize;
-
+        
         NSMutableArray<SPMatch *> *arrayOfMatches = [[NSMutableArray alloc] init];
-
+        
         NSLog(@"%@ vs %@", [teams[teamIdx] getTeamName], [teamList[0] getTeamName]);
         SPMatch *match = [[SPMatch alloc]
-            initWithLocalTeam:teams[teamIdx]
-                  visitorTeam:teamList[0]
-            andDateOfTheMatch:[arrayOfMatchDates objectAtIndex:(day)]];
+                          initWithLocalTeam:teams[teamIdx]
+                          visitorTeam:teamList[0]
+                          andDateOfTheMatch:[arrayOfMatchDates objectAtIndex:(day)]];
         [arrayOfMatches addObject:match];
-
+        
         for (int idx = 1; idx < halfSize; idx++) {
             NSUInteger firstTeam = (day + idx) % teamsSize;
             NSUInteger secondTeam = (day + teamsSize - idx) % teamsSize;
             NSLog(@"%@ vs %@", [teams[firstTeam] getTeamName],
                   [teams[secondTeam] getTeamName]);
             SPMatch *match = [[SPMatch alloc]
-                initWithLocalTeam:teams[firstTeam]
-                      visitorTeam:teams[secondTeam]
-                andDateOfTheMatch:[arrayOfMatchDates objectAtIndex:(day)]];
+                              initWithLocalTeam:teams[firstTeam]
+                              visitorTeam:teams[secondTeam]
+                              andDateOfTheMatch:[arrayOfMatchDates objectAtIndex:(day)]];
             [arrayOfMatches addObject:match];
         }
-        [self.seasonPlan setObject:arrayOfMatches
+        [seasonLocalDictionary setObject:arrayOfMatches
                             forKey:[arrayOfMatchDates objectAtIndex:(day)]];
-
+        
         NSLog(@"-------- Second Round ----------------");
         [arrayOfMatches removeAllObjects];
-        NSLog(@"Day %@", [arrayOfMatchDates objectAtIndex:(day + numDays)]);
-
+        NSLog(@"Day %@", [arrayOfMatchDates objectAtIndex:(day + numDaysPerRound)]);
+        
         NSLog(@"%@ vs %@", [teamList[0] getTeamName], [teams[teamIdx] getTeamName]);
         match = [[SPMatch alloc]
-            initWithLocalTeam:teams[teamIdx]
-                  visitorTeam:teamList[0]
-            andDateOfTheMatch:[arrayOfMatchDates objectAtIndex:(day + numDays)]];
+                 initWithLocalTeam:teams[teamIdx]
+                 visitorTeam:teamList[0]
+                 andDateOfTheMatch:[arrayOfMatchDates objectAtIndex:(day + numDaysPerRound)]];
         [arrayOfMatches addObject:match];
-
+        
         for (int idx = 1; idx < halfSize; idx++) {
             NSUInteger firstTeam = (day + idx) % teamsSize;
             NSUInteger secondTeam = (day + teamsSize - idx) % teamsSize;
             NSLog(@"%@ vs %@", [teams[secondTeam] getTeamName],
                   [teams[firstTeam] getTeamName]);
             SPMatch *match = [[SPMatch alloc]
-                initWithLocalTeam:teams[firstTeam]
-                      visitorTeam:teams[secondTeam]
-                andDateOfTheMatch:[arrayOfMatchDates objectAtIndex:(day + numDays)]];
+                              initWithLocalTeam:teams[firstTeam]
+                              visitorTeam:teams[secondTeam]
+                              andDateOfTheMatch:[arrayOfMatchDates objectAtIndex:(day + numDaysPerRound)]];
             [arrayOfMatches addObject:match];
         }
-        [self.seasonPlan
-            setObject:arrayOfMatches
-               forKey:[arrayOfMatchDates objectAtIndex:(day + numDays)]];
+        [seasonLocalDictionary
+         setObject:arrayOfMatches
+         forKey:[arrayOfMatchDates objectAtIndex:(day + numDaysPerRound)]];
     }
+    return seasonLocalDictionary;
 }
 
 #pragma mark - Date management
@@ -183,33 +236,33 @@
 {
     NSMutableArray<NSDate *> *arrayOfMatchDates = [[NSMutableArray alloc] init];
     NSInteger sunday = 1;
-
+    
     // Set the incremental interval for each interaction.
     NSDateComponents *oneDay = [[NSDateComponents alloc] init];
     [oneDay setDay:1];
-
+    
     // Using a Gregorian calendar.
     NSCalendar *calendar = [[NSCalendar alloc]
-        initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-
+                            initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    
     NSDate *currentDate =
-        [self dateToFormatedDate:[self.jsonSeasonFile objectForKey:@"start"]];
-
+    [self dateToFormatedDate:[self.jsonSeasonFile objectForKey:@"start"]];
+    
     // Iterate from fromDate until toDate
     while ([currentDate
-               compare:[self dateToFormatedDate:[self.jsonSeasonFile
-                                                    objectForKey:@"end"]]] ==
+            compare:[self dateToFormatedDate:[self.jsonSeasonFile
+                                              objectForKey:@"end"]]] ==
            NSOrderedAscending) {
-
+        
         NSDateComponents *dateComponents =
-            [calendar components:NSCalendarUnitWeekday fromDate:currentDate];
+        [calendar components:NSCalendarUnitWeekday fromDate:currentDate];
         if (dateComponents.weekday == sunday) {
             [arrayOfMatchDates addObject:currentDate];
         }
-
+        
         // "Increment" currentDate by one day.
         currentDate =
-            [calendar dateByAddingComponents:oneDay toDate:currentDate options:0];
+        [calendar dateByAddingComponents:oneDay toDate:currentDate options:0];
     }
     return arrayOfMatchDates;
 }
@@ -219,7 +272,7 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSDate *date = [dateFormatter dateFromString:dateStr];
-
+    
     return date;
 }
 
@@ -227,37 +280,54 @@
 
 - (NSArray<NSDate *> *)sortMatchDatesArray
 {
-    NSArray<NSDate *> *allMatchDays = self.seasonPlan.allKeys;
-    NSSortDescriptor *descriptor =
-        [[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES];
-    NSArray *descriptors = [NSArray arrayWithObject:descriptor];
-
-    return [allMatchDays sortedArrayUsingDescriptors:descriptors];
+    if (self.seasonPlan) {
+        NSArray<NSDate *> *allMatchDays = self.seasonPlan.allKeys;
+        NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES];
+        NSArray *descriptors = [NSArray arrayWithObject:descriptor];
+        
+        return [NSArray arrayWithArray:[allMatchDays sortedArrayUsingDescriptors:descriptors]];
+    }
+    return nil;
 }
 
 - (NSInteger)getNumberOfMatchDays
 {
-    return [[self.seasonPlan allKeys] count];
+    if (self.seasonPlan) {
+        return [[self.seasonPlan allKeys] count];
+    } else {
+        return 0;
+    }
 }
 
 - (NSInteger)getNumberOfMatchesForADay:(NSInteger)indexOfDay
 {
-    return [[self.seasonPlan objectForKey:[self sortMatchDatesArray][indexOfDay]]
-        count];
+    if (self.sortedMatchDays && (indexOfDay < self.sortedMatchDays.count) && ([self.seasonPlan objectForKey:self.sortedMatchDays[indexOfDay]])) {
+        return [[self.seasonPlan objectForKey:self.sortedMatchDays[indexOfDay]] count];
+    } else {
+        return 0;
+    }
 }
 
-- (NSString *)getMatchStringForADay:(NSInteger)indexOfDay
-                           andMatch:(NSInteger)indexOfTeam
+- (NSString *)getMatchStringForADay:(NSInteger)indexOfDay andMatch:(NSInteger)indexOfTeam
 {
-    return [[[self.seasonPlan objectForKey:[self sortMatchDatesArray][indexOfDay]]
-        objectAtIndex:indexOfTeam] getStringForMatch];
+    if (self.sortedMatchDays &&
+        (indexOfDay < self.sortedMatchDays.count) &&
+        ([self.seasonPlan objectForKey:self.sortedMatchDays[indexOfTeam]])) {
+        return [[[self.seasonPlan objectForKey:self.sortedMatchDays[indexOfDay]] objectAtIndex:indexOfTeam] getStringForMatch];
+    } else {
+        return @"";
+    }
 }
 
 - (NSString *)getStringForMatchDate:(NSInteger)dateIndex
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterLongStyle;
-    return [formatter stringFromDate:[self sortMatchDatesArray][dateIndex]];
+    if (dateIndex < self.sortedMatchDays.count) {
+        return [formatter stringFromDate:self.sortedMatchDays[dateIndex]];
+    } else {
+        return @"";
+    }
 }
 
 @end

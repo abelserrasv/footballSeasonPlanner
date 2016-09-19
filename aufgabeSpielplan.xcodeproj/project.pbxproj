@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB5063ED1D8C6F340045D145 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CB5063EF1D8C6F340045D145 /* Localizable.strings */; };
+		CB5064031D8C7CE00045D145 /* seasonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5064021D8C7CE00045D145 /* seasonTests.m */; };
+		CB7DE5A61D8DB45E00AECBE3 /* matchesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7DE5A51D8DB45E00AECBE3 /* matchesTests.m */; };
 		CB9340601D8ABAF8004A922D /* SPSeason.m in Sources */ = {isa = PBXBuildFile; fileRef = CB93405F1D8ABAF8004A922D /* SPSeason.m */; };
 		CBEBCFA81D6F491F006161AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEBCFA71D6F491F006161AF /* main.m */; };
 		CBEBCFAB1D6F491F006161AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEBCFAA1D6F491F006161AF /* AppDelegate.m */; };
@@ -18,7 +21,26 @@
 		CBEBCFC21D6F55EF006161AF /* SPMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEBCFC11D6F55EF006161AF /* SPMatch.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CB5064051D8C7CE00045D145 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBEBCF9B1D6F491E006161AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBEBCFA21D6F491F006161AF;
+			remoteInfo = aufgabeSpielplan;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		CB5063F21D8C6F6C0045D145 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CB5063F31D8C6F740045D145 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CB5063F41D8C6F880045D145 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CB5063F51D8C6FB20045D145 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CB5063F81D8C706F0045D145 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CB5064001D8C7CE00045D145 /* aufgabeSpielplanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aufgabeSpielplanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB5064021D8C7CE00045D145 /* seasonTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = seasonTests.m; sourceTree = "<group>"; };
+		CB5064041D8C7CE00045D145 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB7DE5A51D8DB45E00AECBE3 /* matchesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = matchesTests.m; sourceTree = "<group>"; };
 		CB93405E1D8ABAF8004A922D /* SPSeason.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSeason.h; sourceTree = "<group>"; };
 		CB93405F1D8ABAF8004A922D /* SPSeason.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSeason.m; sourceTree = "<group>"; };
 		CBEBCFA31D6F491F006161AF /* aufgabeSpielplan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aufgabeSpielplan.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +60,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		CB5063FD1D8C7CE00045D145 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CBEBCFA01D6F491F006161AF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -48,6 +77,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CB5064011D8C7CE00045D145 /* aufgabeSpielplanTests */ = {
+			isa = PBXGroup;
+			children = (
+				CB5064021D8C7CE00045D145 /* seasonTests.m */,
+				CB5064041D8C7CE00045D145 /* Info.plist */,
+				CB7DE5A51D8DB45E00AECBE3 /* matchesTests.m */,
+			);
+			path = aufgabeSpielplanTests;
+			sourceTree = "<group>";
+		};
 		CB93405D1D8A9702004A922D /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				CBEBCFA51D6F491F006161AF /* aufgabeSpielplan */,
+				CB5064011D8C7CE00045D145 /* aufgabeSpielplanTests */,
 				CBEBCFA41D6F491F006161AF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				CBEBCFA31D6F491F006161AF /* aufgabeSpielplan.app */,
+				CB5064001D8C7CE00045D145 /* aufgabeSpielplanTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				CBEBCFA71D6F491F006161AF /* main.m */,
+				CB5063EF1D8C6F340045D145 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -105,6 +147,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		CB5063FF1D8C7CE00045D145 /* aufgabeSpielplanTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB5064071D8C7CE00045D145 /* Build configuration list for PBXNativeTarget "aufgabeSpielplanTests" */;
+			buildPhases = (
+				CB5063FC1D8C7CE00045D145 /* Sources */,
+				CB5063FD1D8C7CE00045D145 /* Frameworks */,
+				CB5063FE1D8C7CE00045D145 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CB5064061D8C7CE00045D145 /* PBXTargetDependency */,
+			);
+			name = aufgabeSpielplanTests;
+			productName = aufgabeSpielplanTests;
+			productReference = CB5064001D8C7CE00045D145 /* aufgabeSpielplanTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		CBEBCFA21D6F491F006161AF /* aufgabeSpielplan */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CBEBCFBA1D6F491F006161AF /* Build configuration list for PBXNativeTarget "aufgabeSpielplan" */;
@@ -131,6 +191,12 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Abel Serra";
 				TargetAttributes = {
+					CB5063FF1D8C7CE00045D145 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 6CUFCH7T8E;
+						ProvisioningStyle = Automatic;
+						TestTargetID = CBEBCFA21D6F491F006161AF;
+					};
 					CBEBCFA21D6F491F006161AF = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 6CUFCH7T8E;
@@ -144,8 +210,12 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				ca,
+				it,
+				es,
+				de,
+				en,
 			);
 			mainGroup = CBEBCF9A1D6F491E006161AF;
 			productRefGroup = CBEBCFA41D6F491F006161AF /* Products */;
@@ -153,16 +223,25 @@
 			projectRoot = "";
 			targets = (
 				CBEBCFA21D6F491F006161AF /* aufgabeSpielplan */,
+				CB5063FF1D8C7CE00045D145 /* aufgabeSpielplanTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CB5063FE1D8C7CE00045D145 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CBEBCFA11D6F491F006161AF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				CBEBCFB61D6F491F006161AF /* LaunchScreen.storyboard in Resources */,
+				CB5063ED1D8C6F340045D145 /* Localizable.strings in Resources */,
 				CBEBCFB31D6F491F006161AF /* Assets.xcassets in Resources */,
 				CBEBCFB11D6F491F006161AF /* Main.storyboard in Resources */,
 			);
@@ -171,6 +250,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CB5063FC1D8C7CE00045D145 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB7DE5A61D8DB45E00AECBE3 /* matchesTests.m in Sources */,
+				CB5064031D8C7CE00045D145 /* seasonTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CBEBCF9F1D6F491F006161AF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -186,7 +274,27 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		CB5064061D8C7CE00045D145 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBEBCFA21D6F491F006161AF /* aufgabeSpielplan */;
+			targetProxy = CB5064051D8C7CE00045D145 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		CB5063EF1D8C6F340045D145 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB5063F21D8C6F6C0045D145 /* ca */,
+				CB5063F31D8C6F740045D145 /* it */,
+				CB5063F41D8C6F880045D145 /* es */,
+				CB5063F51D8C6FB20045D145 /* de */,
+				CB5063F81D8C706F0045D145 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		CBEBCFAF1D6F491F006161AF /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -206,10 +314,41 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		CB5064081D8C7CE00045D145 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = 6CUFCH7T8E;
+				INFOPLIST_FILE = aufgabeSpielplanTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = abelserra.aufgabeSpielplanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aufgabeSpielplan.app/aufgabeSpielplan";
+			};
+			name = Debug;
+		};
+		CB5064091D8C7CE00045D145 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = 6CUFCH7T8E;
+				INFOPLIST_FILE = aufgabeSpielplanTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = abelserra.aufgabeSpielplanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aufgabeSpielplan.app/aufgabeSpielplan";
+			};
+			name = Release;
+		};
 		CBEBCFB81D6F491F006161AF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -256,6 +395,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -317,6 +457,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CB5064071D8C7CE00045D145 /* Build configuration list for PBXNativeTarget "aufgabeSpielplanTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB5064081D8C7CE00045D145 /* Debug */,
+				CB5064091D8C7CE00045D145 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CBEBCF9E1D6F491E006161AF /* Build configuration list for PBXProject "aufgabeSpielplan" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -21,6 +21,20 @@
 @property (readonly) NSString *seasonName;
 
 /**
+ The Error that could occur when creating the season.
+ */
+@property (readonly) NSError *errorDuringCreation;
+
+/**
+ Initializer that creates a new instance of the SPSeason with json filename as parameter.
+ 
+ @param jsonFileName the json filename.
+ 
+ @return an instance of SPSeason.
+ */
+- (id)initWithJsonFileName:(NSString *)jsonFileName;
+
+/**
  This method calculates the number of match days the season has. This method is used to calculate the
  number of sections of the table.
  

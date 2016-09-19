@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  aufgabeSpielplan
+
+  Created by Abel Serra on 16.09.16.
+  Copyright © 2016 Abel Serra. All rights reserved.
+*/
+
+"SID_OK" = "OK";
+"SID_ERROR" = "Fehler";
+"SID_REST" = "erholung";

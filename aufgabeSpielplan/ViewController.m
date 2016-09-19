@@ -21,13 +21,30 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.season = [[SPSeason alloc] init];
-
-    self.title = [NSString stringWithFormat:@"%@ (%@)", self.season.leagueName, self.season.seasonName];
-
-    self.matchesTableView.dataSource = self;
-    self.matchesTableView.delegate = self;
+    
+    self.season = [[SPSeason alloc] initWithJsonFileName:@"mannschaften"];
+    if (self.season.errorDuringCreation) {
+        UIAlertController *alertController = [UIAlertController
+                                    alertControllerWithTitle:NSLocalizedString(@"SID_ERROR", nil)
+                                    message:self.season.errorDuringCreation.localizedDescription
+                                    preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"SID_OK", nil)
+                                   style:UIAlertActionStyleDefault
+                                   handler:nil];
+        
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    } else {
+        if (self.season.leagueName && self.season.seasonName) {
+            self.title = [NSString stringWithFormat:@"%@ (%@)", self.season.leagueName, self.season.seasonName];
+        } else if (self.season.leagueName) {
+            self.title = [NSString stringWithFormat:@"%@", self.season.leagueName];
+        }
+        
+        self.matchesTableView.dataSource = self;
+        self.matchesTableView.delegate = self;
+    }
 }
 
 #pragma mark - TableView Data Source
@@ -45,13 +62,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
-
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-
+    
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.text = [self.season getMatchStringForADay:indexPath.section andMatch:indexPath.row];
     return cell;
 }

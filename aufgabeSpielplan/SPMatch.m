@@ -34,16 +34,18 @@
 
 - (NSString *)getStringForMatch
 {
-    if (!self.localTeam.getTeamName || !self.visitorTeam.getTeamName) {
-        NSString *team;
+    if (!self.localTeam.getTeamName && !self.visitorTeam.getTeamName) {
+        return @"";
+    }else if (!self.localTeam.getTeamName || !self.visitorTeam.getTeamName) {
+        NSString *team = @"";
         if (self.localTeam.getTeamName) {
             team = [self.localTeam getTeamName];
         }
-        else {
+        else if (self.visitorTeam.getTeamName) {
             team = [self.visitorTeam getTeamName];
         }
 
-        return [NSString stringWithFormat:@"%@ rest", team];
+        return [NSString stringWithFormat:@"%@ %@", team, NSLocalizedString(@"SID_REST", nil)];
     }
     else {
         return [NSString stringWithFormat:@"%@ - %@", [self.localTeam getTeamName],
